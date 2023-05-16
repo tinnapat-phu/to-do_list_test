@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>To-do list</title>
+    <link rel="stylesheet" href="/style.css">
+</head>
+<body class="grid-container">
+    <% data.forEach( (onepage,page_no) => {%>
+    <div class="thegridcolor">
+       
+       <form action="/deletePage/<%= page_no %>?_method=DELETE" method="POST">
+            <input type="hidden" name="_method" value="DELETE">
+            <button class="deletepage" type="submit">❌</button>
+        </form>
+  
+            <% if(data_name[page_no].Editing == false) { %>
+
+                
+            
+                
+                <form action="/pagename-edit/<%= page_no %>?_method=PUT" method="POST">
+                    <input type="hidden" name="_method" value="PUT">
+
+                   
+                    <b>
+                         ○ <%= data_name[page_no].Name %>
+                    </b>
+
+                    <td>
+                        <button class="delete" type="submit">✍️</button>
+                    </td>
+                </form>
+                
+    
+            <%} else { %>
+
+
+
+                <form action="/pagename-edit/<%= page_no %>?_method=PUT" method="POST">
+                    <input type="hidden" name="_method" value="PUT">
+
+                    <td> 
+                        <input type="text" name="pageName" value="<%= data_name[page_no].Name %>">
+                    </td>
+                    
+                    <td>
+                        <button type="submit">✅︎</button>
+                    </td>
+                    
+                </form>
+                
+
+            
+            <%} %>
+      
+       <table>
+            <tr>
+                <th>no.</th>
+                <th>Task</th>
+                <th>Edit</th>
+                <th>Delete</th>
+            </tr>
+            <% onepage.forEach( (element,index) => {%>
+            <tr>
+
+                <td><%= element.todoID %></td>
+
+                <% if(element.Editing == false) { %>
+
+            
+        
+             
+                        <form action="/toggle-edit/<%= element.todoID %>?_method=PUT" method="POST">
+                            <input type="hidden" name="_method" value="PUT">
+                            <input type="hidden" name="todoPages" value="<%= page_no %>">
+                            
+                            <td>
+                                <%= element.todoTask %>
+                            </td>
+
+
+                            <td>
+                                <button class="delete" type="submit">✍️</button>
+                            </td>
+                        </form>
+                        
+             
+                <%} else { %>
+
+
+
+                        <form action="/toggle-edit/<%= element.todoID %>?_method=PUT" method="POST">
+                            <input type="hidden" name="_method" value="PUT">
+                            <input type="hidden" name="todoPages" value="<%= page_no %>">
+                            
+                            <td> 
+                                <input type="text" name="todoTask" value="<%= element.todoTask %>">
+                            </td>
+                            
+                            <td>
+                                <button type="submit">✅︎</button>
+                            </td>
+                            
+                        </form>
+                        
+
+                    
+                <%} %>
+                <td>
+
+                    <form action="/deleteTask/<%= element.todoID %>?_method=DELETE" method="POST">
+                        <input type="hidden" name="_method" value="DELETE">
+                        <input type="hidden" name="todoPages" value="<%= page_no %>">
+                        <button class="delete" type="submit">🗑️</button>
+                    </form>
+                    
+                </td>
+            </tr>
+            <% }) %>
+        
+        </table>
+
+        <form action="/" method="POST">
+            <input type="text" name="todoTask" placeholder="Enter Task">
+            <input type="hidden" name="todoPages" value="<%= page_no %>">
+            <button type="submit">Add</button>
+        </form>
+    </div>
+    <% }) %>
+
+    <div>
+
+        <form action="/new" method="POST">
+            <button type="submit">➕ More To-do list</button>
+        </form>
+
+    </div>
+
+    
+
+     
+</body>
+</html>
